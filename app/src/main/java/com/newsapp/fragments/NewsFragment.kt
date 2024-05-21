@@ -1,56 +1,63 @@
 package com.newsapp.fragments
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.newsapp.api.APIManager
-import com.newsapp.model.Category
-import com.newsapp.model.Constants
 import com.newsapp.model.api.ArticlesItem
-import com.newsapp.model.api.ArticlesResponse
+import com.newsapp.ui.theme.news.NewsViewModel
 import com.newsapp.utils.NewsCard
 import com.newsapp.utils.NewsSourcesTabRows
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.newsapp.ui.theme.green
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Newsfragment(
-    navController: NavHostController,
-    modifier: Modifier = Modifier
-    ,category: String) {
-    val newsListState= remember {
-        mutableStateListOf<ArticlesItem>()
+    modifier: Modifier = Modifier,
+    category: String
+    , viewModel: NewsViewModel = viewModel()
+    ,onNewsClick:  (String) -> Unit
+) {
+    if (viewModel.isLoading.value){
+        Column(modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            CircularProgressIndicator(color = green)
+
+        }
     }
+
+
+
     Column(modifier=modifier) {
         NewsSourcesTabRows(category =category, ){sourceId->
-            APIManager.getNewsServices()
-                .getNewsBySource(Constants.API_KEY,sourceId)
-                .enqueue(object : Callback<ArticlesResponse> {
-                    override fun onResponse(
-                        call: Call<ArticlesResponse>,
-                        response: Response<ArticlesResponse>
-                    ) {
-                        newsListState.clear()
-                        val newsList=response.body()?.articles
-                        if (newsList?.isNotEmpty()==true){
-                            newsListState.addAll(newsList)
-                        }
-                    }
+            viewModel.getNewsBySource(sourceId)
 
-                    override fun onFailure(call: Call<ArticlesResponse>, t: Throwable) {
-                        TODO("Not yet implemented")
-                    }
-
-                })
         }
-        NewsList(newsListState.toList())
+        NewsList(viewModel.newsListState.toList()){
+            onNewsClick(it)
+
+        }
+
+    }
+    if (viewModel.messageState.value.isNotEmpty()){
+        AlertDialog(onDismissRequest = {viewModel.messageState.value=""}, confirmButton = {
+            TextButton(onClick = { viewModel.messageState.value="" }) {
+                Text(text = "OK")
+
+            }
+        }, title = {
+            Text(text = viewModel.messageState.value)
+        })
 
     }
 
@@ -60,11 +67,14 @@ fun Newsfragment(
 }
 
 @Composable
-fun NewsList(newsList:List<ArticlesItem>) {
+fun NewsList(newsList:List<ArticlesItem>,onNewsClick:  (String)->Unit) {
 
     LazyColumn {
         items(newsList.size) { position ->
-            NewsCard(model = newsList[position])
+            NewsCard(newsItem = newsList[position]){title->
+                onNewsClick(title)
+
+            }
 
 
         }

@@ -16,23 +16,21 @@ interface NewsServices {
     fun getNewsBySource(
         @Query("apiKey") apiKey:String,
         @Query("sources") sourceId:String,
-        @Query("q") searchQuery:String?=null,
-
 
     ):Call<ArticlesResponse>
 
     @GET("everything")
-    fun changeLanguage(
+    fun getNewsItem(
         @Query("apiKey") apiKey:String,
-        @Query("language") language: String
+        @Query("q") title: String,
+        @Query("searchIn") topic: String="title"
+
     ): Call<ArticlesResponse>
 
     @GET("everything")
-    fun getNewsBySourceQuery(
+    fun changeLanguage(
         @Query("apiKey") apiKey:String,
         @Query("q") searchQuery:String?=null,
-
-
         ):Call<ArticlesResponse>
 }
 

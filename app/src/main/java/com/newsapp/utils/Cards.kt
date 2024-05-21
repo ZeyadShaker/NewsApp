@@ -27,22 +27,28 @@ import com.newsapp.model.api.ArticlesItem
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun NewsCard(model: ArticlesItem) {
+fun NewsCard(newsItem: ArticlesItem,onNewsClick:((String) -> Unit)?=null) {
     val context = LocalContext.current
     Card(
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-                val intent= Intent(context,NewsDetailsActivity::class.java)
-                intent.putExtra("article",model)
-                context.startActivity(intent)
+
+                       if (onNewsClick != null) {
+                           onNewsClick(newsItem.title?:"")
+                       }
+
+
+//                val intent= Intent(context,NewsDetailsActivity::class.java)
+//                intent.putExtra("article",model)
+//                context.startActivity(intent)
 
             },
         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
 
     ) {
         GlideImage(
-            model = model.urlToImage ?: "",
+            model = newsItem.urlToImage ?: "",
             contentDescription = "news image",
             modifier = Modifier
                 .padding(8.dp)
@@ -50,17 +56,17 @@ fun NewsCard(model: ArticlesItem) {
             loading = placeholder(R.drawable.logo)
         )
         Text(
-            text = model.source?.name ?: " ",
+            text = newsItem.source?.name ?: " ",
             modifier = Modifier.padding(horizontal = 8.dp), fontSize = 10.sp
         )
         Text(
-            text = model.title ?: "",
+            text = newsItem.title ?: "",
             modifier = Modifier.padding(horizontal = 8.dp),
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium
         )
         Text(
-            text = model.publishedAt ?: "", modifier = Modifier
+            text = newsItem.publishedAt ?: "", modifier = Modifier
                 .padding(16.dp)
                 .align(Alignment.End), fontSize = 13.sp
         )

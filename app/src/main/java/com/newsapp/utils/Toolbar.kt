@@ -29,9 +29,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.newsapp.R
+import com.newsapp.model.Category
+import com.newsapp.model.Constants
 import com.newsapp.model.SearchScreen
 import com.newsapp.ui.theme.green
-import com.newsapp.utils.compose.SearchBox
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,7 +78,10 @@ fun NewsTopAppBar(titleResID:Int ,onSideMenuClick: () -> Unit) {
                 bottomStart = 30.dp
             )
         ), actions = {
-           SearchBox()
+            if (titleResID!=R.string.news_app)
+            Image(painter = painterResource(id = R.drawable.ic_search), contentDescription = stringResource(
+                R.string.icon_search
+            ), modifier = Modifier.padding(8.dp))
         }
     )
 
