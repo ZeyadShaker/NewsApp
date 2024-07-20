@@ -2,10 +2,13 @@ package com.newsapp.model.api
 
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
+
 import com.google.gson.annotations.SerializedName
 
 @Parcelize
 data class SourcesItem(
+
+	var roomId: Int,
 
 	@field:SerializedName("country")
 	val country: String? = null,

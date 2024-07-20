@@ -20,14 +20,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.newsapp.NewsDetailsActivity
 import com.newsapp.ui.theme.news.NewsViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.newsapp.R
-import com.newsapp.model.NewsItem
 import com.newsapp.model.api.ArticlesItem
 import com.newsapp.ui.theme.textColor
 

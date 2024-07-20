@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
-import com.newsapp.NewsDetailsActivity
+
 import com.newsapp.R
 
 import com.newsapp.model.api.ArticlesItem
@@ -34,14 +34,12 @@ fun NewsCard(newsItem: ArticlesItem,onNewsClick:((String) -> Unit)?=null) {
             .padding(8.dp)
             .clickable {
 
-                       if (onNewsClick != null) {
-                           onNewsClick(newsItem.title?:"")
-                       }
+                if (onNewsClick != null) {
+                    onNewsClick(newsItem.title?:"")
+                }
 
 
-//                val intent= Intent(context,NewsDetailsActivity::class.java)
-//                intent.putExtra("article",model)
-//                context.startActivity(intent)
+
 
             },
         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
